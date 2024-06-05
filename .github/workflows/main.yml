@@ -62,6 +62,9 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y docker-compose
+        # Set working directory to root of the repository
+      - name: Set working directory
+        run: cd $GITHUB_WORKSPACE
       - name: Deploy with Docker Compose
         run: docker-compose -f docker-compose.yaml up -d
 
