@@ -13,9 +13,9 @@ jobs:
       - name: Login to docker hub
         run: docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}     
       - name: Build Docker Image
-        run: docker build -t sissoo/updated-nodejs-backend  .
+        run: docker build -t lepakshia/nodejs_backend  .
       - name: Publish Image to docker hub
-        run: docker push sissoo/updated-nodejs-backend:latest 
+        run: docker push lepakshia/nodejs_backend:latest 
 
   deploy:
     needs: build
@@ -25,7 +25,7 @@ jobs:
         run: docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
       - name: Pull images from docker hub
         run: |
-          docker pull sissoo/updated-nodejs-backend:latest
+          docker pull lepakshia/nodejs_backend:latest
           docker pull nginx:latest
       - name: Delete old containers
         run: |
