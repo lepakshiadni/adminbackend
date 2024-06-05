@@ -1,8 +1,8 @@
-# # name: Deploy Node Application 
-# # on: 
-# #   push:
-# #     branches:
-# #       - main
+name: Deploy Node Application 
+on: 
+  push:
+    branches:
+      - main
 
 jobs:
   build:
