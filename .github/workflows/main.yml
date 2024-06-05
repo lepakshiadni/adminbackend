@@ -63,6 +63,11 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y docker-compose
         # Set working directory to root of the repository
+      # Add a step to check current directory and list files
+      - name: Check current directory and files
+        run: |
+          pwd
+          ls -l
       - name: Set working directory
         run: cd $GITHUB_WORKSPACE
       - name: Deploy with Docker Compose
