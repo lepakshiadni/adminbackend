@@ -1,83 +1,9 @@
-# name: Deploy Node Application 
-# on: 
-#   push:
-#     branches:
-#       - main
+# # name: Deploy Node Application 
+# # on: 
+# #   push:
+# #     branches:
+# #       - main
 
-# jobs:
-#   build:
-#     runs-on: ubuntu-latest
-#     steps:
-#       - name: Checkout Source
-#         uses: actions/checkout@v4
-#       - name: Login to docker hub
-#         run: docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}     
-#       - name: Build Docker Image
-#         run: docker build -t sissoo/updated-nodejs-backend  .
-#       - name: Publish Image to docker hub
-#         run: docker push sissoo/updated-nodejs-backend:latest 
-
-#   deploy:
-#     needs: build
-#     runs-on: self-hosted 
-#     steps:
-#       - name: Login to docker hub
-#         run: docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
-#       - name: Pull images from docker hub
-#         run: |
-#           docker pull sissoo/updated-nodejs-backend:latest
-#           docker pull nginx:latest
-#       - name: Delete old containers
-#         run: |
-#           docker rm -f nodejs_backend-containerr1 || true
-#           docker rm -f nginx || true
-#       - name: Set up environment variables
-#         run: |
-#           touch .env
-#           echo "DB=${{ secrets.DB }}" >> .env
-#           echo "PORT=${{ secrets.PORT }}" >> .env
-#           echo "JWT_TOKEN=${{ secrets.JWT_TOKEN }}" >> .env
-#           echo "OTP_AUTHID=${{ secrets.OTP_AUTHID }}" >> .env
-#           echo "OTP_TOKEN=${{ secrets.OTP_TOKEN }}" >> .env
-#           echo "S3_ACCESSKEY_KEY=${{ secrets.S3_ACCESSKEY_KEY }}" >> .env
-#           echo "S3_SECRET_KEY=${{ secrets.S3_SECRET_KEY }}" >> .env
-#           echo "S3_BUCKET_REGION=${{ secrets.S3_BUCKET_REGION }}" >> .env
-#           echo "S3_BUCKET_NAME=${{ secrets.S3_BUCKET_NAME }}" >> .env
-#       - name: Configure SSH
-#         run: |
-#           mkdir -p ~/.ssh
-#           echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
-#           chmod 600 ~/.ssh/id_rsa
-#           ssh-keyscan github.com >> ~/.ssh/known_hosts
-#       - name: Install Docker Compose
-#         run: |
-#           sudo apt-get update
-#           sudo apt-get install -y docker-compose
-#       - name: Deploy with Docker Compose
-#         run: docker-compose up -d
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-name: Deploy Node Application 
-on: 
-  push:
-    branches:
-      - main
-      
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -87,18 +13,24 @@ jobs:
       - name: Login to docker hub
         run: docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}     
       - name: Build Docker Image
-        run: docker build -t lepakshia/nodejs_backend  .
+        run: docker build -t sissoo/updated-nodejs-backend  .
       - name: Publish Image to docker hub
-        run: docker push lepakshia/nodejs_backend:latest 
- 
+        run: docker push sissoo/updated-nodejs-backend:latest 
+
   deploy:
     needs: build
     runs-on: self-hosted 
     steps:
-      - name: Pull image from docker hub
-        run: sudo docker pull lepakshia/nodejs_backend:latest
-      - name: Delete old container
-        run: sudo docker rm -f nodejs_backend-containerr1  
+      - name: Login to docker hub
+        run: docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
+      - name: Pull images from docker hub
+        run: |
+          docker pull sissoo/updated-nodejs-backend:latest
+          docker pull nginx:latest
+      - name: Delete old containers
+        run: |
+          docker rm -f nodejs_backend-containerr1 || true
+          docker rm -f nginx || true
       - name: Set up environment variables
         run: |
           touch .env
@@ -117,5 +49,73 @@ jobs:
           echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
           ssh-keyscan github.com >> ~/.ssh/known_hosts
-      - name: Run Docker Container
-        run: sudo docker run -d -p 4000:4000 --restart=always --name nodejs_backend-containerr1 --env-file .env lepakshia/nodejs_backend
+      - name: Install Docker Compose
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y docker-compose
+      - name: Deploy with Docker Compose
+        run: docker-compose up -d
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# name: Deploy Node Application 
+# on: 
+#   push:
+#     branches:
+#       - main
+      
+# jobs:
+#   build:
+#     runs-on: ubuntu-latest
+#     steps:
+#       - name: Checkout Source
+#         uses: actions/checkout@v4
+#       - name: Login to docker hub
+#         run: docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}     
+#       - name: Build Docker Image
+#         run: docker build -t lepakshia/nodejs_backend  .
+#       - name: Publish Image to docker hub
+#         run: docker push lepakshia/nodejs_backend:latest 
+ 
+#   deploy:
+#     needs: build
+#     runs-on: self-hosted 
+#     steps:
+#       - name: Pull image from docker hub
+#         run: sudo docker pull lepakshia/nodejs_backend:latest
+#       - name: Delete old container
+#         run: sudo docker rm -f nodejs_backend-containerr1  
+#       - name: Set up environment variables
+#         run: |
+#           touch .env
+#           echo "DB=${{ secrets.DB }}" >> .env
+#           echo "PORT=${{ secrets.PORT }}" >> .env
+#           echo "JWT_TOKEN=${{ secrets.JWT_TOKEN }}" >> .env
+#           echo "OTP_AUTHID=${{ secrets.OTP_AUTHID }}" >> .env
+#           echo "OTP_TOKEN=${{ secrets.OTP_TOKEN }}" >> .env
+#           echo "S3_ACCESSKEY_KEY=${{ secrets.S3_ACCESSKEY_KEY }}" >> .env
+#           echo "S3_SECRET_KEY=${{ secrets.S3_SECRET_KEY }}" >> .env
+#           echo "S3_BUCKET_REGION=${{ secrets.S3_BUCKET_REGION }}" >> .env
+#           echo "S3_BUCKET_NAME=${{ secrets.S3_BUCKET_NAME }}" >> .env
+#       - name: Configure SSH
+#         run: |
+#           mkdir -p ~/.ssh
+#           echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+#           chmod 600 ~/.ssh/id_rsa
+#           ssh-keyscan github.com >> ~/.ssh/known_hosts
+#       - name: Run Docker Container
+#         run: sudo docker run -d -p 4000:4000 --restart=always --name nodejs_backend-containerr1 --env-file .env lepakshia/nodejs_backend
