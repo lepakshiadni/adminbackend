@@ -14,6 +14,10 @@ RUN npm install
 
 COPY . .
 
+# Ensure the SSL certificates are copied to the correct location
+COPY /etc/letsencrypt/live/admin.sissoo.in/fullchain.pem /etc/letsencrypt/live/admin.sissoo.in/fullchain.pem
+COPY /etc/letsencrypt/live/admin.sissoo.in/privkey.pem /etc/letsencrypt/live/admin.sissoo.in/privkey.pem
+
 
 
 # Make port 8080 available to the world outside this container
