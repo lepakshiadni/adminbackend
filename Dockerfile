@@ -19,7 +19,7 @@ COPY . .
 
 # Make port 8080 available to the world outside this container
 EXPOSE 4000
-  expose 443
+
 
 # Run the app when the container launches
 CMD ["npm", "run", "start"] 
