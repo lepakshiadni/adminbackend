@@ -4,17 +4,18 @@ const cors = require('cors');
 const dbconnect = require('./config/dbconnect');
 const cookieParser = require('cookie-parser');
 const fs = require('fs');
+const http = require('http');
 const https = require('https');
 const os = require('os');
 const dotenv = require('dotenv').config();
 
+const app = express();
+
 // Load SSL certificate and key
-const options = {
+const sslOptions = {
   key: fs.readFileSync('/etc/letsencrypt/live/admin.sissoo.in/privkey.pem'),
   cert: fs.readFileSync('/etc/letsencrypt/live/admin.sissoo.in/fullchain.pem')
 };
-
-const app = express();
 
 // Routes imports 
 const { notFound, errorHandler } = require('./middleware/errorhandler');
@@ -87,9 +88,20 @@ app.get("/server", (req, resp) => {
 });
 
 const PORT = process.env.PORT || 4000;
-const server = https.createServer(options, app).listen(PORT, () => {
-    console.log(`Server is running on port ${PORT} with HTTPS`);
+const HTTP_PORT = process.env.HTTP_PORT || 80;
+
+// Start both HTTP and HTTPS servers
+const httpServer = http.createServer(app);
+const httpsServer = https.createServer(sslOptions, app);
+
+httpServer.listen(HTTP_PORT, () => {
+    console.log(`HTTP Server is running on port ${HTTP_PORT}`);
 });
+
+httpsServer.listen(PORT, () => {
+    console.log(`HTTPS Server is running on port ${PORT}`);
+});
+
 
 
 
