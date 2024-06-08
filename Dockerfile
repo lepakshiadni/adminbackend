@@ -44,9 +44,10 @@ COPY . .
 # Expose port 4000
 EXPOSE 4000
 
+
 # Copy SSL certificate files
-COPY /etc/letsencrypt/live/admin.sissoo.in/fullchain.pem /etc/ssl/certs/fullchain.pem
-COPY /etc/letsencrypt/live/admin.sissoo.in/privkey.pem /etc/ssl/private/privkey.pem
+COPY certs/fullchain.pem /etc/ssl/certs/fullchain.pem
+COPY certs/privkey.pem /etc/ssl/private/privkey.pem
 
 # Command to run the app with HTTPS
 CMD ["npm", "run", "start"]
@@ -62,33 +63,6 @@ CMD ["npm", "run", "start"]
 
 
 
-
-# # Stage 1: Build the Node.js application
-# FROM node:alpine3.18 AS build
-
-# # Set the working directory to /app
-# WORKDIR /app
-
-# # Copy package.json and package-lock.json to the container
-# COPY package*.json ./
-
-# # Install dependencies
-# RUN npm install --production
-
-# # Copy the rest of the application
-# COPY . .
-
-# # Stage 2: Serve the Node.js application with Nginx
-# FROM nginx:1.23-alpine
-
-# # Copy static files from the build stage to Nginx's web root directory
-# COPY --from=build /app /usr/share/nginx/html
-
-# # Expose port 80 to the outside world
-# EXPOSE 80
-
-# # Default command to start Nginx when the container launches
-# CMD ["nginx", "-g", "daemon off;"]
 
 
 
