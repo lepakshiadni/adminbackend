@@ -45,9 +45,6 @@ COPY . .
 EXPOSE 4000
 
 
-# Copy SSL certificate files
-COPY certs/fullchain.pem /etc/ssl/certs/fullchain.pem
-COPY certs/privkey.pem /etc/ssl/private/privkey.pem
 
 # Command to run the app with HTTPS
 CMD ["npm", "run", "start"]
