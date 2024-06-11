@@ -1,32 +1,31 @@
 
-# # Use the official Node.js 14 image as the base image.
-# FROM node:alpine3.18
-
-
-# Use an official Node.js runtime as a parent image
+# Use the official Node.js 14 image as the base image
 FROM node:alpine3.18
 
 # Set the working directory
 WORKDIR /app
 
-# Install dependencies
+# Copy package.json and package-lock.json
 COPY package*.json ./
+
+# Install dependencies
 RUN npm install
 
 # Copy the rest of the application code
 COPY . .
 
-# Install Nginx
-RUN apt-get update && apt-get install -y nginx
+# Expose port 4000 (for Node.js) and port 80 (for NGINX)
+EXPOSE 4000
+EXPOSE 80
 
-# Copy Nginx configuration file
+# Install NGINX
+RUN apk update && apk add nginx
+
+# Copy NGINX configuration file
 COPY nginx.conf /etc/nginx/nginx.conf
 
-# Expose ports
-EXPOSE 4000 80
-
-# Start Nginx and your backend application
-CMD service nginx start && npm start
+# Command to start NGINX and the Node.js application
+CMD nginx && npm run start
 
 
 
