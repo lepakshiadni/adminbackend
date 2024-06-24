@@ -44,6 +44,12 @@ RUN npm install
 
 # Copy the rest of the application code
 COPY . .
+# Create directories for SSL certificates
+RUN mkdir -p /etc/ssl/certs /etc/ssl/private
+
+# Copy SSL certificates
+COPY /etc/letsencrypt/live/admin.sissoo.in/fullchain.pem /etc/ssl/certs/
+COPY /etc/letsencrypt/live/admin.sissoo.in/privkey.pem /etc/ssl/private/
 
 # Expose port 4000
 EXPOSE 4000
